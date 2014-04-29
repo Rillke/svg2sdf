@@ -1,16 +1,16 @@
 <?php
-	
-	function molecule2SVG(molecule $mol,$sizeX,$sizeY,$angle=0,$molName="",$displayName=false,$scale=1.0,$standardBondLength=1.0,$scaleGroup=1.0,$offsetGroupX=0.0,$offsetGroupY=0.0)
+
+	function molecule2SVG( molecule $mol, $sizeX, $sizeY, $angle = 0, $molName = "", $displayName = false, $scale = 1.0, $standardBondLength = 1.0, $scaleGroup = 1.0, $offsetGroupX = 0.0, $offsetGroupY = 0.0 )
 	{
-		
+
 			$str = "";
 
-			//Defines color scheme
-			$bgc =  "#ffffff"; 
-			$white = "#ffffff"; 
+			// Defines color scheme
+			$bgc =  "#ffffff";
+			$white = "#ffffff";
 			$black = "#000000";
 			$grey = "#e0e0e0";
-			$darkgrey = "#a4a4a4"; 
+			$darkgrey = "#a4a4a4";
 			$blue = "#0000ff";
 			$red = "#ff0000";
 			$yellow = "#c8aa1a";
@@ -31,13 +31,13 @@
 			$maxY = $extremes[1]->y;
 			$minY = $extremes[0]->y;
 
-			$cX = ($maxX*$scale + $minX*$scale)/2;
-			$cY = ($maxY*$scale + $minY*$scale)/2;	
+			$cX = ( $maxX * $scale + $minX * $scale ) / 2;
+			$cY = ( $maxY * $scale + $minY * $scale ) / 2;
 
-			$nr = Min(count($marklist),10);
+			$nr = Min( count( $marklist ), 10 );
 
 
-	 		for($i=0;$i<count($mol->bonds);$i++)
+	 		for ( $i = 0; $i < count( $mol->bonds ); $i++ )
 			{
 				$c = $black;
 				$c2 = $black;
@@ -45,7 +45,7 @@
 				$atom1 = $mol->atoms[$mol->bonds[$i]->atom1];
 				$atom2 = $mol->atoms[$mol->bonds[$i]->atom2];
 
-				switch($atom1->type)
+				switch( $atom1->type )
 				{
 					case "O":
 						$c = $red;
@@ -83,7 +83,7 @@
 					break;
 				}
 
-				switch($atom2->type)
+				switch( $atom2->type )
 				{
 					case "O":
 						$c2 = $red;
@@ -123,92 +123,92 @@
 
 				$displayBond = true;
 
-				if ($atom1->type=="H" || $atom2->type=="H")
+				if ( $atom1->type == "H" || $atom2->type == "H" )
 				{
 					$displayBond = false;
 
-					if ((($atom1->type!="C" && $atom1->type!="H") || ($atom2->type!="C" && $atom2->type!="H")) && ($atom2->displayH || $atom2->displayH))
+					if ( ( ( $atom1->type != "C" && $atom1->type != "H" ) || ( $atom2->type != "C" && $atom2->type != "H" ) ) && ( $atom2->displayH || $atom2->displayH ) )
 					{
 						$displayBond = true;
 					}
 
-					if ($mol->bonds[$i]->stereo==1 || $mol->bonds[$i]->stereo==6)
+					if ( $mol->bonds[$i]->stereo == 1 || $mol->bonds[$i]->stereo == 6 )
 						$displayBond = true;
 				}
 
-				if ($displayBond)
+				if ( $displayBond )
 				{
-					$_2d_1 = $mol->get2D($atom1->coord,$angle);
-					$_2d_2 = $mol->get2D($atom2->coord,$angle);
+					$_2d_1 = $mol->get2D( $atom1->coord, $angle );
+					$_2d_2 = $mol->get2D( $atom2->coord, $angle );
 
-					$x1 = $sizeX/2 - $cX + $_2d_1->x*$scale;
-					$x2 = $sizeX/2 - $cX + $_2d_2->x*$scale;
-					$y1 = $sizeY/2 - $cY +$_2d_1->y*$scale;
-					$y2 = $sizeY/2 - $cY +$_2d_2->y*$scale;
-
-
-					$thickness = $standardBondLength /25;
+					$x1 = $sizeX / 2 - $cX + $_2d_1->x * $scale;
+					$x2 = $sizeX / 2 - $cX + $_2d_2->x * $scale;
+					$y1 = $sizeY / 2 - $cY + $_2d_1->y * $scale;
+					$y2 = $sizeY / 2 - $cY + $_2d_2->y * $scale;
 
 
+					$thickness = $standardBondLength / 25;
 
-					if ($mol->bonds[$i]->stereo==0)
+
+
+					if ( $mol->bonds[$i]->stereo == 0 )
 					{
-					if ($mol->bonds[$i]->type == 2)
-						$str .=dickelinieSVG($x1,$y1,$x2,$y2,$c,$c2,$standardBondLength/20,$thickness);
-					elseif($mol->bonds[$i]->type == 1)
-						$str .=twoColorLineSVG($x1,$y1,$x2,$y2,$c,$c2,$thickness);
-					elseif($mol->bonds[$i]->type == 3)
+					if ( $mol->bonds[$i]->type == 2 )
+						$str .= dickelinieSVG( $x1, $y1, $x2, $y2, $c, $c2, $standardBondLength / 20, $thickness );
+					elseif ( $mol->bonds[$i]->type == 1 )
+						$str .= twoColorLineSVG( $x1, $y1, $x2, $y2, $c, $c2, $thickness );
+					elseif ( $mol->bonds[$i]->type == 3 )
 					{
-						$str .=dickelinieSVG($x1,$y1,$x2,$y2,$c,$c2,$standardBondLength/10,$thickness);
-						$str .=twoColorLineSVG($x1,$y1,$x2,$y2,$c,$c2,$thickness);
+						$str .= dickelinieSVG( $x1, $y1, $x2, $y2, $c, $c2, $standardBondLength / 10, $thickness );
+						$str .= twoColorLineSVG( $x1, $y1, $x2, $y2, $c, $c2, $thickness );
 					}
 					}
-					elseif($mol->bonds[$i]->stereo==1)
-						$str .=upLineSVG($x1,$y1,$x2,$y2,$c,$c2,$standardBondLength/7);
-					elseif($mol->bonds[$i]->stereo==6)
-						$str .=downLineSVG($x1,$y1,$x2,$y2,$c,$c2,$standardBondLength/7);
-					elseif($mol->bonds[$i]->stereo==3)
-						$str .=upDownLineSVG($x1,$y1,$x2,$y2,$c,$c2,$standardBondLength/7);
+					elseif ( $mol->bonds[$i]->stereo == 1 )
+						$str .= upLineSVG( $x1, $y1, $x2, $y2, $c, $c2, $standardBondLength / 7 );
+					elseif ( $mol->bonds[$i]->stereo == 6 )
+						$str .= downLineSVG( $x1, $y1, $x2, $y2, $c, $c2, $standardBondLength / 7 );
+					elseif ( $mol->bonds[$i]->stereo == 3 )
+						$str .= upDownLineSVG( $x1, $y1, $x2, $y2, $c, $c2, $standardBondLength / 7 );
 
 				}
 			}
 
-				for($i=0;$i<count($mol->atoms);$i++)
+				for ( $i = 0; $i < count( $mol->atoms ); $i++ )
 				{
 					$ch = "";
-					switch($mol->atoms[$i]->charge)
+					switch( $mol->atoms[$i]->charge )
 					{
 						case 1:
-							$ch ="3+";
+							$ch = "3+";
 						break;
 
 						case 2:
-							$ch ="2+";
+							$ch = "2+";
 						break;
 
 						case 3:
-							$ch ="+";
+							$ch = "+";
 						break;
 
 						case 4:
-							$ch ="**";
+							$ch = "**";
 						break;
 
 						case 5:
-							$ch ="-";
+							$ch = "-";
 						break;
 
 						case 6:
-							$ch ="2-";
+							$ch = "2-";
 						break;
 
 						case 7:
-							$ch ="3-";
+							$ch = "3-";
 						break;
 					}
 
 
-					switch($mol->atoms[$i]->type)
+					switch( $mol->atoms[$i]->type )
 					{
 						case "O":
 							$c = $red;
@@ -236,83 +236,83 @@
 						break;
 
 						case "C":
-							$c=$black;
+							$c = $black;
 						break;
 
 						case "H":
-							$c=$darkgrey;
+							$c = $darkgrey;
 						break;
 
 						default:
-							$c=$yellow;
+							$c = $yellow;
 						break;
 					}
 
 					$atom = $mol->atoms[$i]->type;
 
-					if ($atom == "C" || $atom=="c")
+					if ( $atom == "C" || $atom == "c" )
 					{
 						$atom = "";
 						$ch = "";
 					}
-					
-					
+
+
 					$tc = $blue;
 
-					if ($mol->atoms[$i]->type!="H" || $mol->atoms[$i]->displayH)
+					if ( $mol->atoms[$i]->type != "H" || $mol->atoms[$i]->displayH )
 					{
-						//if($atom!="")$atom .= $ch;
-						if(strlen($atom)>1)
+						// if($atom!="")$atom .= $ch;
+						if ( strlen( $atom ) > 1 )
 							$tc = $darkgrey;
 						else
 							$tc = $blue;
 
-						if ($sizeX > 128)
+						if ( $sizeX > 128 )
 						{
 							$tc = $c;
 							$c = $bgc;
 						}
 
-						$_2d = $mol->get2D($mol->atoms[$i]->coord,$angle);
-						//Draw a filled circle for atom representation 
-						if($atom!="") $str .=drawEllipseSVG ($sizeX/2 - $cX+$_2d->x*$scale,$sizeY/2 - $cY + $_2d->y*$scale, $standardBondLength*0.26, $standardBondLength*0.26, $c );
-						
-						//Only output chemical symbols when size is over 128 px
-						if ($sizeX > 128 && strlen($atom)>0)
+						$_2d = $mol->get2D( $mol->atoms[$i]->coord, $angle );
+						// Draw a filled circle for atom representation
+						if ( $atom != "" ) $str .= drawEllipseSVG ( $sizeX / 2 - $cX + $_2d->x * $scale, $sizeY / 2 - $cY + $_2d->y * $scale, $standardBondLength * 0.26, $standardBondLength * 0.26, $c );
+
+						// Only output chemical symbols when size is over 128 px
+						if ( $sizeX > 128 && strlen( $atom ) > 0 )
 						{
-							$ts = 0.2*$scale;
-							
+							$ts = 0.2 * $scale;
+
 							$fontSizeFactor = 0.5;
-							
-							if ($ch=="")
+
+							if ( $ch == "" )
 							{
-								$fontSize = $standardBondLength*$fontSizeFactor;
+								$fontSize = $standardBondLength * $fontSizeFactor;
 								$fontOffset = 0.0;
-							}else
+							} else
 							{
-								$fontSize = $standardBondLength*$fontSizeFactor;
-								$fontOffset = 0.0; //$standardBondLength / 45;
+								$fontSize = $standardBondLength * $fontSizeFactor;
+								$fontOffset = 0.0; // $standardBondLength / 45;
 							}
-							
-							if ($ch!="")
-								$chargeText = "<tspan baseline-shift='super' font-size='" . $fontSize/2 . "'>" . $ch . "</tspan>";
-							
-							
-							if ($atom!="")
-								$str .=imageCenterStringSVG($fontSize,$sizeX/2 - $cX+$_2d->x*$scale ,$sizeY/2 - $cY+$_2d->y*$scale+$standardBondLength*0.22-$fontOffset,$atom.$chargeText,$tc);
+
+							if ( $ch != "" )
+								$chargeText = "<tspan baseline-shift='super' font-size='" . $fontSize / 2 . "'>" . $ch . "</tspan>";
+
+
+							if ( $atom != "" )
+								$str .= imageCenterStringSVG( $fontSize, $sizeX / 2 - $cX + $_2d->x * $scale , $sizeY / 2 - $cY + $_2d->y * $scale + $standardBondLength * 0.22 -$fontOffset, $atom . $chargeText, $tc );
 						}
 					}
 			}
 
-			if ($displayName)
-				$str .=imageCenterStringSVG($standardBondLength*0.5,$sizeX/2 ,$sizeY ,$molName,$black);
+			if ( $displayName )
+				$str .= imageCenterStringSVG( $standardBondLength * 0.5, $sizeX / 2 , $sizeY , $molName, $black );
 
 			$str .= "</g>";
 
 
-			$head = "<g id='".$molName."' transform='scale(".$scaleGroup.") translate(".$offsetGroupX.",".$offsetGroupY.") scale(1)'>";
+			$head = "<g id='" . $molName . "' transform='scale(" . $scaleGroup . ") translate(" . $offsetGroupX . "," . $offsetGroupY . ") scale(1)'>";
 
 
 			return $head . $str;
-	}	
+	}
 ?>

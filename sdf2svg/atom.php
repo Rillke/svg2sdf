@@ -1,14 +1,14 @@
 <?php
 
-class atom{
-	
+class atom {
+
 	public $coord;
 	public $type;
 	public $charge;
 	public $stereo;
 	public $displayH;
-	
-	function __construct($type, $coord,$charge=0,$stereo=0,$displayH=false)
+
+	function __construct( $type, $coord, $charge = 0, $stereo = 0, $displayH = false )
 	{
 		$this->coord = $coord;
 		$this->type = $type;
@@ -16,7 +16,7 @@ class atom{
 		$this->stereo = $stereo;
 		$this->displayH = $displayH;
 	}
-	
+
 }
 
 

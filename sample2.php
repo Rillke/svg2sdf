@@ -6,7 +6,7 @@
 		<script>
 			uploadMolAndDisplaySVG = function()
 			{
-				document.getElementById('download').value=0;
+				document.getElementById( 'download' ).value=0;
 				document.getElementById('displayName').value=1;
 				document.theForm.submit();
 			}
